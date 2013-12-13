@@ -19,5 +19,8 @@ end
 
 template "/etc/nginx/templates/VHOST.conf" do
   source "VHOST.conf.erb"
+  variables({
+    :private_dir => "sites/default/files/private"
+  })
   action :create
 end

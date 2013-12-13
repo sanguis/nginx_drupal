@@ -1,0 +1,13 @@
+fastcgi_cache_path /dev/shm/microcache levels=1:2 keys_zone=microcache:5M max_size=1G inactive=2h;
+map $http_cookie $cache_uid {
+default nil; # hommage to Lisp :)
+~SESS[[:alnum:]]+=(?<session_id>[[:alnum:]]+) $session_id;
+}
+ 
+map $request_method $no_cache {
+default 1;
+HEAD 0;
+GET 0;
+}
+ 
+client_max_body_size 10M;
