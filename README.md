@@ -3,6 +3,7 @@
 # Requirements
 
 # Usage
+Installs an app template for vhosts to include that contains a common set of drupal inc files.
 
 # Attributes
 
@@ -10,4 +11,4 @@
 
 # Author
 
-Author:: YOUR_NAME (<YOUR_EMAIL>)
+Author:: Josh Beauregard (sanguisdex@gmail.com)
