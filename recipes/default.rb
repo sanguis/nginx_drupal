@@ -8,7 +8,8 @@
 #
 
 #create apps directory
-remote_directory "/etc/nginx/apps" do
+remote_directory "apps" do
+  path "/etc/nginx/apps"
   files_group "root"
   files_owner "root"
   files_mode 00644
@@ -18,10 +19,10 @@ remote_directory "/etc/nginx/apps" do
   action :create_if_missing
 end
 
-template "/etc/nginx/apps/drupal" do
-  source "drupal.erb"
-  action :create
-end
+# template "/etc/nginx/appVs/drupal" do
+#   source "drupal.erb"
+#   action :create
+# end
 
 #enable micro caching
 template "/etc/nginx/conf.d/micro.conf" do
@@ -31,20 +32,20 @@ end
 
 # create vhost templates
 
-remote_directory "/etc/nginx/templates" do
-  files_group "root"
-  files_owner "root"
-  files_mode 00644
-  owner "root"
-  group "root"
-  mode 00755
-  action :create_if_missing
-end
-
-template "/etc/nginx/templates/VHOST.conf" do
-  source "VHOST.conf.erb"
-  variables({
-    :private_dir => "sites/default/files/private"
-  })
-  action :create
-end
+# remote_directory "/etc/nginx/templates" do
+#   files_group "root"
+#   files_owner "root"
+#   files_mode 00644
+#   owner "root"
+#   group "root"
+#   mode 00755
+#   action :create_if_missing
+# end
+#
+# template "/etc/nginx/templates/VHOST.conf" do
+#   source "VHOST.conf.erb"
+#   variables({
+#     :private_dir => "sites/default/files/private"
+#   })
+#   action :create
+# end

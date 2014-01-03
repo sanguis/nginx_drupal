@@ -1,0 +1,5 @@
+# Usage
+
+1. Copy the VHOST.conf to /etc/nginx/conf.d/MyDOMAIN.conf
+2. replace URL with the FQDN
+3. Replace the PATH with the full path to the files dir
