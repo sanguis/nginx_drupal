@@ -28,7 +28,7 @@ end
 # create vhost templates
 
  remote_directory "templates" do
-   path "/etc/nginx/nginx/templates"
+   path "/etc/nginx/templates"
    files_group "root"
    files_owner "root"
    files_mode 00644
