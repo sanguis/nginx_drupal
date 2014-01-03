@@ -15,6 +15,7 @@ remote_directory "/etc/nginx/apps" do
   owner "root"
   group "root"
   mode 00755
+  action :create_if_missing
 end
 
 template "/etc/nginx/apps/drupal" do
@@ -37,6 +38,7 @@ remote_directory "/etc/nginx/templates" do
   owner "root"
   group "root"
   mode 00755
+  action :create_if_missing
 end
 
 template "/etc/nginx/templates/VHOST.conf" do
