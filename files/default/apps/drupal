@@ -1,0 +1,55 @@
+index index.php;
+auth_basic "Restricted to , knectar";
+auth_basic_user_file /root/.htpasswd;
+location = / {
+error_page 404 index.php;
+error_page 404 index.php;
+}
+
+
+location = /favicon.ico {
+log_not_found off;
+access_log off;
+}
+
+if (!-e $request_filename) {
+rewrite ^/(.*)$ /index.php?q=$1 last;
+}
+
+
+# hide protected files
+location ~* .(engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(.php)?|xtmpl)$|^(code-style.pl|Entries.*|Repository|Root|Tag|Template)$ {
+deny all;
+}
+
+location = $private_dir {
+  return 404;
+}
+
+
+# Fighting with ImageCache? This little gem is amazing.
+location ~ ^/sites/.*/files/imagecache/ {
+try_files $uri @rewrite;
+}
+# Catch image styles for D7 too.
+location ~ ^/sites/.*/files/styles/ {
+try_files $uri @rewrite;
+}
+# serve static files directly
+location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico)$ {
+access_log        off;
+expires           30d;
+log_not_found off;
+}
+
+location ~* ^.+\.php$ {
+return 404;
+}
+location = /index.php {
+fastcgi_split_path_info ^(.+\.php)(/.+)$;
+include fastcgi_params;
+fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+fastcgi_intercept_errors on;
+fastcgi_pass unix:/var/run/php5-fpm.sock;
+fastcgi_param MAX_FILE_SIZE 10M;
+}
