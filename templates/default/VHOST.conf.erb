@@ -1,9 +1,9 @@
-  server {
-    #the URL
-    server_name URL;
-    #path to the local host
-    root PATH;
-    #include the app template
-    set private_dir <%= @private_dir %>;
-    include(/etc/nginx/apps/drupal);
-  }
+server {
+  #the URL
+  server_name URL;
+  #path to the local host
+  root PATH;
+  #include the app template
+  set $private_dir <%= @private_dir %>;
+  include /etc/nginx/apps/drupal;
+}
