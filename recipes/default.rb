@@ -45,3 +45,9 @@ end
    })
    action :create
  end
+
+ #added inodb settings
+ template "/etc/mysql/conf.d/innodb.cnf" do
+   source "innodb.cnf.erb"
+   action :create
+ end
