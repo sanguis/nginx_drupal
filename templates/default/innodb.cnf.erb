@@ -1,11 +1,12 @@
 [mysqld]
 
-default-storage-engine          = <%= node['nginx_drupal']['innodb']['default-storage-engine'] %>
-innodb_log_file_size            = <%= node['nginx_drupal']['innodb']['innodb_log_file_size'] %>
-/var/lib/mysql/ib_logfile*      = <%= node['nginx_drupal']['innodb']['/var/lib/mysql/ib_logfile*'] %>
-innodb_log_buffer_size          = <%= node['nginx_drupal']['innodb']['innodb_log_buffer_size'] %>
-innodb_open_files               = <%= node['nginx_drupal']['innodb']['innodb_open_files'] %>
-ignore-builtin-innodb           = <%= node['nginx_drupal']['innodb']['ignore-builtin-innodb'] %>
+default-storage-engine      = <%= node['nginx_drupal']['innodb']['default-storage-engine'] %>
+innodb_log_file_size        = <%= node['nginx_drupal']['innodb']['innodb_log_file_size'] %>
+/var/lib/mysql/ib_logfile*  = <%= node['nginx_drupal']['innodb']['/var/lib/mysql/ib_logfile*'] %>
+innodb_log_buffer_size      = <%= node['nginx_drupal']['innodb']['innodb_log_buffer_size'] %>
+innodb_open_files           = <%= node['nginx_drupal']['innodb']['innodb_open_files'] %>
+table_definition_cache      = <%= node['nginx_drupal']['innodb']['innodb_open_files'] %>
+ignore-builtin-innodb       = <%= node['nginx_drupal']['innodb']['ignore-builtin-innodb'] %>
 <%- if node['nginx_drupal']['innodb']['plugin-load'] %>
 plugin-load=innodb=ha_innodb_plugin.so;innodb_trx=ha_innodb_plugin.so;innodb_locks=ha_innodb_plugin.so;innodb_lock_waits=ha_innodb_plugin.so;innodb_cmp=ha_innodb_plugin.so;innodb_cmp_reset=ha_innodb_plugin.so;
 <%- end %>
