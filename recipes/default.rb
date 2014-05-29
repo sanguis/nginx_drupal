@@ -45,9 +45,30 @@ end
    })
    action :create
  end
-
+ 256M
  #added inodb settings
  template "/etc/mysql/conf.d/innodb.cnf" do
    source "innodb.cnf.erb"
    action :create
  end
+ 
+
+## install php libs via pear
+include_recipe 'php' 
+
+php_pear "apc" do
+  action :install
+  directives(
+    :shm_segments=> node['nginx_drupal']['shm_segments'],
+    :shm_size => node['nginx_drupal']['shm_size '],
+    :ttl=> node['nginx_drupal']['ttl'],
+    :user_ttl=> node['nginx_drupal']['user_ttl'],
+    :enable_cli=> node['nginx_drupal']['enable_cli'],
+    :stat=> node['nginx_drupal']['stat'],
+    :stat_ctime=> node['nginx_drupal']['stat_ctime'],
+    :lazy_classes=> node['nginx_drupal']['lazy_classes'],
+    :lazy_functions=> node['nginx_drupal']['lazy_functions'],
+    :write_lock=> node['nginx_drupal']['write_lock'],
+    :rfc1867=> node['nginx_drupal']['rfc1867']
+  )
+end
