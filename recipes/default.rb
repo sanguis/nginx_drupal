@@ -73,7 +73,7 @@ php_pear "apc" do
 end
 
 pears = [
-  'curl',
+  #'curl',
   'memcache',
   'gd',
   'mysql'
