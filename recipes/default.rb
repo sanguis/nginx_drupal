@@ -72,11 +72,21 @@ php_pear "apc" do
   )
 end
 
+=begin future needs
+case node['platform_family']
+when 'rhel', 'fedora'
+  %w{ zlib-devel }.each do |pkg|
+    package pkg do
+      action :install
+    end
+  end
+end
+
 pears = [
   #'curl',
-  'memcache',
-  'gd',
-  'mysql'
+#  'memcache',
+  #'gd',
+  #'mysql'
 ]
 
 pears.each do |pear|
@@ -84,3 +94,12 @@ pears.each do |pear|
     action :install
   end
 end
+services = ["php5-fpm", "nginx"]
+
+services.each do |ser|
+  service ser do
+    supports :status => true, :restart => true, :truereload => true
+    action [ :enable, :start ]
+  end
+end
+=end futreure needs
