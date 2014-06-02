@@ -45,7 +45,6 @@ end
    })
    action :create
  end
- 256M
  #added inodb settings
  template "/etc/mysql/conf.d/innodb.cnf" do
    source "innodb.cnf.erb"
@@ -71,4 +70,17 @@ php_pear "apc" do
     :write_lock=> node['nginx_drupal']['write_lock'],
     :rfc1867=> node['nginx_drupal']['rfc1867']
   )
+end
+
+pears = [
+  'curl',
+  'memcache',
+  'gd',
+  'mysql'
+]
+
+pears.each do |pear|
+  php_pear pear do
+    action :install
+  end
 end
