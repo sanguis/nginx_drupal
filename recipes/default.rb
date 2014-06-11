@@ -55,6 +55,16 @@ end
 ## install php libs via pear
 include_recipe 'php' 
 
+#APC and dependacies
+case node['platform_family']
+when 'rhel', 'fedora'
+  %w{ httpd-devel pcre pcre-devel }.each do |pkg|
+    package pkg do
+      action :install
+    end
+  end
+end
+
 php_pear "apc" do
   action :install
   directives(
