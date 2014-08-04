@@ -55,15 +55,20 @@ end
 ## install php libs via pear
 include_recipe 'php' 
 
+#APC and dependacies
 case node['platform_family']
+when 'rhel', 'fedora'
+  %w{ httpd-devel pcre pcre-devel }.each do |pkg|
+    package pkg do
+      action :install
+    end
 when 'debian'
   # Package resource
   package libprece3-dev do # Name of the package to install
     action :install # Install a package - if version is provided, install that specific version (Default)
   end
 end
-  
- 
+
 php_pear "apc" do
   action :install
   directives(
