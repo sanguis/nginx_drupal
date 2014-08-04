@@ -62,10 +62,11 @@ when 'rhel', 'fedora'
     package pkg do
       action :install
     end
+  end
 when 'debian'
   # Package resource
-  package libprece3-dev do # Name of the package to install
-    action :install # Install a package - if version is provided, install that specific version (Default)
+  package "libpcre3-dev" do 
+    action :install
   end
 end
 
