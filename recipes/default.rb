@@ -55,6 +55,15 @@ end
 ## install php libs via pear
 include_recipe 'php' 
 
+case node['platform_family']
+when 'debian'
+  # Package resource
+  package libprece3-dev do # Name of the package to install
+    action :install # Install a package - if version is provided, install that specific version (Default)
+  end
+end
+  
+ 
 php_pear "apc" do
   action :install
   directives(
