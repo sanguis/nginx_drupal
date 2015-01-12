@@ -2,31 +2,11 @@
 # Cookbook Name:: nginx_drupal
 # Recipe:: default
 #
-# Copyright (C) 2013 Knectar
+# Copyright (C) 2015 Knectar
 # 
 # All rights reserved - Do Not Redistribute
 #
 
-#creating mysql server 
-
-mysql_service 'default' do
-  port '3306'
-  version '5.5'
-  initial_root_password 'change me'
-  action [:create, :start]
-end
-
-mysql_config 'default' do
-  source 'mysite.cnf.erb'
-  notifies :restart, 'mysql_service[default]'
-  action :create
-end
-
-#install the mysql client
-
-mysql_client 'default' do
-  action :create
-end
 
 #create apps directory
 remote_directory "apps" do
@@ -73,40 +53,6 @@ end
  end
  
 
-## install php libs via pear
-include_recipe 'php' 
-
-#APC and dependacies
-case node['platform_family']
-when 'rhel', 'fedora'
-  %w{ httpd-devel pcre pcre-devel }.each do |pkg|
-    package pkg do
-      action :install
-    end
-  end
-when 'debian'
-  # Package resource
-  package "libpcre3-dev" do 
-    action :install
-  end
-end
-
-php_pear "apc" do
-  action :install
-  directives(
-    :shm_segments=> node['nginx_drupal']['shm_segments'],
-    :shm_size => node['nginx_drupal']['shm_size '],
-    :ttl=> node['nginx_drupal']['ttl'],
-    :user_ttl=> node['nginx_drupal']['user_ttl'],
-    :enable_cli=> node['nginx_drupal']['enable_cli'],
-    :stat=> node['nginx_drupal']['stat'],
-    :stat_ctime=> node['nginx_drupal']['stat_ctime'],
-    :lazy_classes=> node['nginx_drupal']['lazy_classes'],
-    :lazy_functions=> node['nginx_drupal']['lazy_functions'],
-    :write_lock=> node['nginx_drupal']['write_lock'],
-    :rfc1867=> node['nginx_drupal']['rfc1867']
-  )
-end
 
 =begin future needs
 case node['platform_family']
