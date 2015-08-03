@@ -19,7 +19,7 @@ location ~* .(engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(.php)
 deny all;
 }
 
-location = $private_dir {
+location $private_dir {
   return 404;
 }
 

@@ -27,16 +27,16 @@ end
 
 # create vhost templates
 
-remote_directory "templates" do
-  path "/etc/nginx/templates"
-  files_group "root"
-  files_owner "root"
-  files_mode 00644
-  owner "root"
-  group "root"
-  mode 00755
-  action :create_if_missing
-end
+ remote_directory "templates" do
+   path "/etc/nginx/templates"
+   files_group "root"
+   files_owner "root"
+   files_mode 00644
+   owner "root"
+   group "root"
+   mode 00755
+   action :create_if_missing
+ end
 
 directory '/etc/nginx/snippets' do
   owner 'root'

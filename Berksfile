@@ -4,7 +4,7 @@ metadata
 
 cookbook 'build-essential'
 cookbook 'nginx'
-cookbook 'mysql'
+cookbook 'mysql', '~> 6.0.6'
 cookbook 'php'
 cookbook 'users'
 cookbook 'zsh'
