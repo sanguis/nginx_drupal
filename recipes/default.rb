@@ -46,13 +46,12 @@ directory '/etc/nginx/snippets' do
   action :create
 end
 
-file 'password' do
-  path '/etc/nginx/snippets/password.conf'
+cookbook_file '/etc/nginx/snippets/password.conf' do
+  source 'password.conf'
   backup 5
   owner 'root'
   group 'root'
   mode '0644'
-  content 'content here'
 
   action :create
 end
@@ -103,34 +102,10 @@ if default['php']['version'] > 5.5
   end
 end
 
-=begin future needs
-case node['platform_family']
-when 'rhel', 'fedora'
-  %w{ zlib-devel }.each do |pkg|
-    package pkg do
-      action :install
-    end
-  end
+cookbook_file '/etc/nginx/conf.d/ssl.conf' do
+  source 'nginx.conf.d/ssl.conf'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  action :create
 end
-
-pears = [
-  #'curl',
-#  'memcache',
-  #'gd',
-  #'mysql'
-]
-
-pears.each do |pear|
-  php_pear pear do
-    action :install
-  end
-end
-services = ["php5-fpm", "nginx"]
-
-services.each do |ser|
-  service ser do
-    supports :status => true, :restart => true, :truereload => true
-    action [ :enable, :start ]
-  end
-end
-=end futreure needs
