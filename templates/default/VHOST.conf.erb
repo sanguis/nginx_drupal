@@ -2,8 +2,9 @@ server {
   #the URL
   server_name URL;
   #path to the local host
-  root PATH;
+  root PATH; #/srv/www/PATH;
   #include the app template
   set $private_dir <%= @private_dir %>;
+  include /etc/nginx/snippets/password.conf;
   include /etc/nginx/apps/drupal;
 }

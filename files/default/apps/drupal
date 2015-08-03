@@ -1,6 +1,4 @@
 index index.php;
-auth_basic "Restricted to knectar";
-auth_basic_user_file /root/.htpasswd;
 location = / {
 error_page 404 index.php;
 }
