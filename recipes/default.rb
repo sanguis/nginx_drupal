@@ -74,7 +74,7 @@ end
 include_recipe 'php' 
 
 #APC and dependacies
-if default['php']['version'] > 5.5
+if node['php']['version'].to_f > 5.5
   case node['platform_family']
   when 'rhel', 'fedora'
     %w{ httpd-devel pcre pcre-devel }.each do |pkg|
