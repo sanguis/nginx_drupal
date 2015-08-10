@@ -10,6 +10,12 @@
 ## install php libs via pear
 include_recipe 'php' 
 
+# install php fpm
+php_fpm_pool "default" do
+  listen '/var/run/php5-fpm.sock'
+  action :install
+end
+
 #APC and dependacies
 case node['platform_family']
   #when 'rhel', 'fedora'
