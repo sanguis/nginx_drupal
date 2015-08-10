@@ -12,8 +12,9 @@
 mysql_service 'default' do
   port '3306'
   version '5.5'
-  initial_root_password 'change me'
+  initial_root_password 'change_me'
   bind_address '127.0.0.1'
+  socket '/var/run/mysqld/mysqld.sock'
   action [:create, :start]
 end
 
