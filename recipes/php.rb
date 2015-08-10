@@ -10,19 +10,30 @@
 ## install php libs via pear
 include_recipe 'php' 
 
-if node['php']['version'] > '5.5'
-  #APC and dependacies
+#APC and dependacies
+case node['platform_family']
+  #when 'rhel', 'fedora'
+  # %w{ httpd-devel pcre pcre-devel }.each do |pkg|
+  #  package pkg do
+  #   action :install
+  # end
+  #end
+when 'debian'
+  %w{ php5-gd php5-mysql }.each do |pkg|
+    package pkg do
+      action :upgrade
+    end
+  end
+end
+
+#APC and dependacies
+if node['php']['version'].to_f > 5.5
   case node['platform_family']
   when 'rhel', 'fedora'
     %w{ httpd-devel pcre pcre-devel }.each do |pkg|
       package pkg do
         action :install
       end
-    end
-  when 'debian'
-    # Package resource
-    package "libpcre3-dev" do 
-      action :install
     end
   end
 
