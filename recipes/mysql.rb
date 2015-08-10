@@ -13,6 +13,7 @@ mysql_service 'default' do
   port '3306'
   version '5.5'
   initial_root_password 'change me'
+  bind_address '127.0.0.1'
   action [:create, :start]
 end
 
