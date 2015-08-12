@@ -4,8 +4,8 @@ maintainer_email 'sanguisdex@gmail.com'
 license          'All rights reserved'
 description      'Installs/Configures nginx_drupal templates'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '0.3.3'
+version          '0.3.4'
 
 depends 'nginx'
-depends 'mysql', '~> 6.0'
+depends 'mysql', '~> 6.1'
 depends 'php'
