@@ -7,5 +7,5 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '1.0.0'
 
 depends 'nginx'
-depends 'mysql', '~> 6.1'
+depends 'mysql'
 depends 'php'
