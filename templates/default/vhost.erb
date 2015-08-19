@@ -7,6 +7,30 @@ server {
    	auth_basic "<%= @passwd_text %>"
    	auth_basic_file "<%= @passwd_file %>"
   <% end %>
-  include /etc/nginx/apps/drupal;
+  <%= if @ssl_crt %>
+  if ($request_method !~ "^(GET|HEAD|POST)$" ) { return 444; }
+          if ($https != 'on') { return 301   <%= @primary_url %>$request_uri; }
+          if ($host != "<%= @primary_url %>") return 301 <%= @primary_url %>$request_uri; }
 
+
+  # Strict Transport Security
+          add_header Strict-Transport-Security "max-age=15768000; includeSubDomains";
+
+          ssl_certificate <%= @ssl_crt %>;
+          ssl_certificate_key <%= @ssl_key %>;
+          <%= if @ssl_chain %>
+          ssl_client_certificate <%= @ssl_chain %>;
+          <% end %>
+          #ssl_verify_client on;
+          #ssl_verify_depth 2;
+          ssl_protocols TLSv1 TLSv1.1 TLSv1.2;  # don’t use SSLv3 ref: POODLE
+          ssl_ciphers         HIGH:!aNULL:!MD5;
+    <% end %>
+  # ANTI CSRF HACK
+          valid_referers none blocked <%= @url =>;
+          set $possible_csrf "";
+          if ($invalid_referer) { set $possible_csrf 1; }
+          if ($request_method = POST) { set $possible_csrf "${possible_csrf}2"; }
+          if ($possible_csrf = 12) { return 403; }
+  include /etc/nginx/apps/drupal;
 }

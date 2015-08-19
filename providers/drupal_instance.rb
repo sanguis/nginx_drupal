@@ -63,10 +63,9 @@ action :create do
     owner @new_resource.app_owner
     group @new_resource.app_owner
     mode '0644'
+    not_if { @new_resource.passwd.empty? }
     variables(content: passwd.join('\n'))
   end
-
-  
 
   ## create vhost file
   template "/etc/nginx/sites-enabled/#{site_alias}.conf" do
@@ -79,12 +78,14 @@ action :create do
       ssl_key: @new_resource.ssl_key,
       ssl_chain: @new_resource.ssl_chain,
       url: server_name,
+      primary_url: primary_url,
       app_path: app_path,
       passwd_file: passwd_file,
       passwd_text: @new_resource.passwd_text,
       private_dir: @new_resource.private_dir
     )
     action :create
+    notifies :restart, 'service[nginx]', :delayed
   end
   #todo: create add ssl
   #todo: create database
