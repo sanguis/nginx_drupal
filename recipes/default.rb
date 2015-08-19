@@ -56,23 +56,12 @@ cookbook_file '/etc/nginx/snippets/password.conf' do
   action :create
 end
 
-template "/etc/nginx/templates/VHOST.conf" do
-  source "VHOST.conf.erb"
-  variables({
-    :private_dir => "sites/default/files/private"
-  })
+directory '/etc/nginx/sites-enabled' do
+  owner 'root'
+  group 'root'
+  mode 0755
   action :create
 end
-#added inodb settings
-template "/etc/mysql/conf.d/innodb.cnf" do
-  source "innodb.cnf.erb"
-  action :create
-end
-
-
-## install php libs via pear
-include_recipe 'php' 
-
 
 cookbook_file '/etc/nginx/conf.d/ssl.conf' do
   source 'nginx.conf.d/ssl.conf'
