@@ -25,7 +25,7 @@ class Chef
     def shortname
       return URI.parse.host.gsub(/^www\./, '').slice[0, 6]
     end
-    def alias
+    def site_alias
       return "#{shortname}.#{new_resource.instance}"
     end
     def server_name
@@ -63,7 +63,7 @@ class Chef
       end
 
       #application directory
-      directory "/srv/www/#{alias}" do
+      directory "/srv/www/#{site_alias}" do
         owner 'sites'
         group 'sites'
         mode '0755'
@@ -72,14 +72,14 @@ class Chef
       end
 
       #public files
-      directory "/srv/www/#{alias}/#{public_files}" do
+      directory "/srv/www/#{site_alias}/#{public_files}" do
         owner node['nginx']['user']
         group node['nginx']['user']
         mode '0755'
         action :create
       end
       #private files
-      directory "/srv/www/#{alias}/#{private_files}" do
+      directory "/srv/www/#{site_alias}/#{private_files}" do
         owner node['nginx']['user']
         group node['nginx']['user']
         mode '0755'
@@ -87,7 +87,7 @@ class Chef
       end
 
       ## create vhost file
-      template "/etc/nginx/sites-enabled/#{alais}.conf" do
+      template "/etc/nginx/sites-enabled/#{site_alias}.conf" do
         source 'vhost.erb'
         owner 'root'
         group 'root'
