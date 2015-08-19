@@ -21,4 +21,5 @@ default['nginx_drupal']['apc']['lazy_classes']	= '1'
 default['nginx_drupal']['apc']['lazy_functions']	= '1'
 default['nginx_drupal']['apc']['write_lock']	= '1'
 default['nginx_drupal']['apc']['rfc1867']   = '1'
-  
+default['nginx_drupal']['drupal_instance']['public_files']   = 'sites/default/files'
+default['nginx_drupal']['drupal_instance']['private_files']   = 'sites/default/files/_private'

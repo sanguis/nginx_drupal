@@ -47,7 +47,46 @@ class Chef
     
     action :create do
       #todo: create file system
-      #todo: create vhost file
+      
+      directory '/etc/nginx/sites-enabled' do
+        owner 'root'
+        group 'root'
+        mode 0755
+        action :create
+      end
+
+      directory '/etc/drush' do
+        owner 'root'
+        group 'root'
+        mode 0755
+        action :create
+      end
+
+      #application directory
+      directory "/srv/www/#{alias}" do
+        owner 'sites'
+        group 'sites'
+        mode '0755'
+        recursive TRUE
+        action :create
+      end
+
+      #public files
+      directory "/srv/www/#{alias}/#{public_files}" do
+        owner node['nginx']['user']
+        group node['nginx']['user']
+        mode '0755'
+        action :create
+      end
+      #private files
+      directory "/srv/www/#{alias}/#{private_files}" do
+        owner node['nginx']['user']
+        group node['nginx']['user']
+        mode '0755'
+        action :create
+      end
+
+      ## create vhost file
       template "/etc/nginx/sites-enabled/#{alais}.conf" do
         source 'vhost.erb'
         owner 'root'
@@ -72,6 +111,13 @@ class Chef
       #todo:delete vhost file
       #todo: delete database
       #todo: delete drush alieas
+      cookbook_file '/etc/cron.hourly/drupal.cron.sh' do
+        source 'drupal.cron.sh'
+        owner 'root'
+        group 'root'
+        mode '0644'
+        action :create
+      end
     end
   end
   
