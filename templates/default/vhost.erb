@@ -1,10 +1,12 @@
 server {
-  #the URL
-  server_name URL;
-  #path to the local host
-  root PATH; #/srv/www/PATH;
+  server_name <%= @url %>;
+  root <%= @app_path %>;
   #include the app template
   set $private_dir <%= @private_dir %>;
-  include /etc/nginx/snippets/password.conf;
+  <%= if @passwd %>
+   	auth_basic "<%= @passwd_text %>"
+   	auth_basic_file "<%= @passwd_file %>"
+  <% end %>
   include /etc/nginx/apps/drupal;
+
 }

@@ -70,3 +70,10 @@ cookbook_file '/etc/nginx/conf.d/ssl.conf' do
   mode '0644'
   action :create
 end
+directory '/etc/drush' do
+  owner 'root'
+  group 'root'
+  mode 0755
+  action :create
+end
+

@@ -19,46 +19,54 @@ def server_name
   @new_resource.url.each {|u| s[] = u.URI.parse.host}
   return s.join(' ')
 end
-def is_ssl
-  if primary_url.URI.parse.scheme == "https"
-    return true
+
+def app_path
+  if @new_resource.app_path.empty?
+    return "/srv/www/#{site_alias}"
   else
-    return false
+    return @new_resource.app_path
   end
+end
+
+def passwd_file
+  return "/home/#{site_alias}-#{@new_resource.app_owner}/passwd"
 end
 
 action :create do
   #todo: create file system
-  directory '/etc/drush' do
-    owner 'root'
-    group 'root'
-    mode 0755
-    action :create
-  end
-
   #application directory
-  directory "/srv/www/#{site_alias}" do
-    owner 'sites'
-    group 'sites'
+  directory app_path do
+    owner @new_resource.app_ower
+    group @new_resource.app_ower
     mode '0755'
     recursive TRUE
     action :create
   end
 
   #public files
-  directory "/srv/www/#{site_alias}/#{public_files}" do
+  directory "#{app_path}/#{@new_resource.public_files}" do
     owner node['nginx']['user']
     group node['nginx']['user']
     mode '0755'
     action :create
   end
   #private files
-  directory "/srv/www/#{site_alias}/#{private_files}" do
+  directory "#{app_path}/#{@new_resource.private_files}" do
     owner node['nginx']['user']
     group node['nginx']['user']
     mode '0755'
     action :create
   end
+  ## create passwd file
+  template passwd_file do
+    source 'blank.erb'
+    owner @new_resource.app_owner
+    group @new_resource.app_owner
+    mode '0644'
+    variables(content: passwd.join('\n'))
+  end
+
+  
 
   ## create vhost file
   template "/etc/nginx/sites-enabled/#{site_alias}.conf" do
@@ -67,11 +75,13 @@ action :create do
     group 'root'
     mode '0644'
     variables(
-      is_ssl: is_ssl,
+      ssl_crt: @new_resource.ssl_crt,
+      ssl_key: @new_resource.ssl_key,
+      ssl_chain: @new_resource.ssl_chain,
       url: server_name,
-      path: @new_resource.path,
-      passwd: @new_resource.passwd,
-      is_ssl: is_ssl,
+      app_path: app_path,
+      passwd_file: passwd_file,
+      passwd_text: @new_resource.passwd_text,
       private_dir: @new_resource.private_dir
     )
     action :create
@@ -79,6 +89,8 @@ action :create do
   #todo: create add ssl
   #todo: create database
   #todo: create drush alieas
+  Chef::Log.info("created drupal_instance")
+  new_resource.updated_by_last_action(true)
 end
 action :delete do
   #todo: delete file system
@@ -92,4 +104,6 @@ action :delete do
     mode '0644'
     action :create
   end
+  Chef::Log.info("deleted drupal_instance")
+  new_resource.updated_by_last_action(true)
 end
