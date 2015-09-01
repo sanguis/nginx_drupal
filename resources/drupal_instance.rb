@@ -19,4 +19,4 @@ attribute :app_path, :kind_of => String
 attribute :public_files, :kind_of => String , :default => 'sites/default/files'
 attribute :private_files, :kind_of => String, :default => 'sites/default/files/_private'
 attribute :db, :kind_of => Hash, :default => {'user' => '', 'db' => '', 'password' => '', 'host' => 'localhost', 'prefix' => ''}
-attribute :app_ower, kind_of => String, :default => 'root'
+attribute :app_ower, :kind_of => String, :default => 'root'
