@@ -12,7 +12,7 @@
 mysql_service 'default' do
   port '3306'
   version '5.5'
-  initial_root_password 'change_me'
+  initial_root_password node['nginx_drupal']['root_passswprd']
   bind_address '127.0.0.1'
   socket '/var/run/mysqld/mysqld.sock'
   action [:create, :start]

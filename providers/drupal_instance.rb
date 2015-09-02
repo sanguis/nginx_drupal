@@ -4,6 +4,7 @@
 # Provider:: drupal_instance
 #
 require 'uri'
+require 'securerandom'
 
 def primary_url
   return @new_resource.url[0]
@@ -30,6 +31,21 @@ end
 
 def passwd_file
   return "/home/#{site_alias}-#{@new_resource.app_owner}/passwd"
+end
+
+def mysql_connection_info  
+  return {
+    :host => @new_resource.db['host'],
+    :username => 'root',
+    :password => node['nginx_drupal']['mysql']['root_password']
+  }
+end
+
+def db_password
+  if @new_resource.db['password'].nil?
+    @new_resource.db['password'] = SecureRandom.hex(20)
+  end
+  return @new_resource.db['password']
 end
 
 action :create do
@@ -67,6 +83,22 @@ action :create do
     variables(content: passwd.join('\n'))
   end
 
+  ## drupal settings file
+  template "#{app_path}/sites/#{@new_resource.sites_directory}/settings.php" do
+    source 'settings.php.erb'
+    owner @new_resource.app_owner
+    group @new_resource.app_owner
+    mode '0444'
+    variables(
+       db: site_alias,
+       db_host: db_host,
+       db_user: site_alias,
+       db_password: db_password,
+       db_prefix: @new_resource.db['db_prefix']
+       extra_settings: @new_resource.extra_settings
+    )
+  end
+
   ## create vhost file
   template "/etc/nginx/sites-enabled/#{site_alias}.conf" do
     source 'vhost.erb'
@@ -89,6 +121,18 @@ action :create do
   end
   #todo: create add ssl
   #todo: create database
+  mysql_database site_alias do
+    connection mysql_connection_info
+    action :create
+  end
+
+mysql_database_user site_alias do
+  connection mysql_connection_info
+  password db_password 
+  database_name site_alias
+  action :create
+end
+
   #todo: create drush alieas
   Chef::Log.info("created drupal_instance")
   new_resource.updated_by_last_action(true)

@@ -17,6 +17,8 @@ attribute :passwd, :kind_of => Array
 attribute :passwd_text, :kind_of => String, :default => "Bots and Balrogs shall not pass"
 attribute :app_path, :kind_of => String
 attribute :public_files, :kind_of => String , :default => 'sites/default/files'
+attribute :sites_directory, :kind_of => String , :default => 'default'
+attribute :extra_settings, :kind_of => Hash
 attribute :private_files, :kind_of => String, :default => 'sites/default/files/_private'
 attribute :db, :kind_of => Hash, :default => {'user' => '', 'db' => '', 'password' => '', 'host' => 'localhost', 'prefix' => ''}
-attribute :app_ower, :kind_of => String, :default => 'root'
+attribute :app_owner, :kind_of => String, :default => 'root'
