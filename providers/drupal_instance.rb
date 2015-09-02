@@ -94,7 +94,7 @@ action :create do
        db_host: db_host,
        db_user: site_alias,
        db_password: db_password,
-       db_prefix: @new_resource.db['db_prefix']
+       db_prefix: @new_resource.db['db_prefix'],
        extra_settings: @new_resource.extra_settings
     )
   end
