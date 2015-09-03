@@ -20,9 +20,7 @@ def site_alias
   return "#{shortname}.#{@new_resource.instance}"
 end
 def server_name
-  s.Array.new()
-  @new_resource.url.each {|u| s[] = u.URI.parse.host}
-  return s.join(' ')
+  return new_resource.url.join(' ')
 end
 
 def app_path
@@ -143,7 +141,7 @@ action :create do
       app_path: app_path,
       passwd_file: passwd_file,
       passwd_text: new_resource.passwd_text,
-      private_dir: new_resource.private_dir
+      private_files: new_resource.private_files
     )
     action :create
     notifies :restart, 'service[nginx]', :delayed
