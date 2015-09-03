@@ -7,9 +7,6 @@
 # All rights reserved - Do Not Redistribute
 #
 
-mysql2_chef_gem 'default' do
-  action :install
-end
 
 #create apps directory
 remote_directory "apps" do

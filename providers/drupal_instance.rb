@@ -10,14 +10,13 @@ use_inline_resources if defined?(use_inline_resources)
 
 
 def primary_url
-  return @new_resource.url.first
+  return new_resource.url.first
 end
 def shortname
-  uri = URI(primary_url)
-  return uri.host.to_s.gsub(/^www\./, '').slice(0, 6)
+  return primary_url.to_s.gsub(/^www\./, '').gsub(/\./, '_').slice(0, 6)
 end
 def site_alias
-  return "#{shortname}.#{@new_resource.instance}"
+  return "#{shortname}.#{new_resource.instance}"
 end
 def server_name
   return new_resource.url.join(' ')
@@ -61,7 +60,7 @@ def db
 end
 def mysql_connection_info  
   return {
-    :host => @new_resource.db['host'],
+    :host => new_resource.db['host'],
     :username => 'root',
     :password => node['nginx_drupal']['mysql']['root_password']
   }
@@ -148,17 +147,18 @@ action :create do
   end
   #todo: create add ssl
   #todo: create database
-  mysql_database site_alias do
-    connection mysql_connection_info
-    action :create
-  end
-
-mysql_database_user site_alias do
-  connection mysql_connection_info
-  password db_password 
-  database_name site_alias
-  action :create
-end
+#  database site_alias do
+#    connection mysql_connection_info
+#    provider   Chef::Provider::Database::Mysql
+#    action :create
+#  end
+#
+#mysql_database_user site_alias do
+#  connection mysql_connection_info
+#  password db_password 
+#  database_name site_alias
+#  action :create
+#end
 
   #todo: create drush alieas
   Chef::Log.info("created drupal_instance")
