@@ -31,7 +31,7 @@ def app_path
 end
 
 def passwd_file
-  return "/home/#{site_alias}-#{@new_resource.app_owner}/passwd"
+  return "/home/#{site_alias}-#{app_owner}/passwd"
 end
 
 def mysql_connection_info  
@@ -48,13 +48,20 @@ def db_password
   end
   return @new_resource.db['password']
 end
+def app_owner
+  if @new_resource.app_owner.nil?
+   return site_alias
+  else
+    return @new_resource.app_owner
+  end
+end
 
 action :create do
   #todo: create file system
   #application directory
   directory app_path do
-    owner @new_resource.app_owner
-    group @new_resource.app_owner
+    owner app_owner
+    group app_owner
     mode '0755'
     recursive TRUE
     action :create
@@ -77,18 +84,18 @@ action :create do
   ## create passwd file
   template passwd_file do
     source 'blank.erb'
-    owner @new_resource.app_owner
-    group @new_resource.app_owner
+    owner app_owner
+    group app_owner
     mode '0644'
     not_if { @new_resource.passwd.empty? }
-    variables(content: passwd.join('\n'))
+    variables(content: @new_resource.passwd.join('\n'))
   end
 
   ## drupal settings file
   template "#{app_path}/sites/#{@new_resource.sites_directory}/settings.php" do
     source 'settings.php.erb'
-    owner @new_resource.app_owner
-    group @new_resource.app_owner
+    owner app_owner
+    group app_owner
     mode '0444'
     variables(
        db: site_alias,
