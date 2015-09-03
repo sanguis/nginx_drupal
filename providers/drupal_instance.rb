@@ -6,6 +6,9 @@
 require 'uri'
 require 'securerandom'
 
+use_inline_resources if defined?(use_inline_resources)
+
+
 def primary_url
   return @new_resource.url.first
 end
@@ -17,7 +20,7 @@ def site_alias
   return "#{shortname}.#{@new_resource.instance}"
 end
 def server_name
-  s.array.new()
+  s.Array.new()
   @new_resource.url.each {|u| s[] = u.URI.parse.host}
   return s.join(' ')
 end
@@ -34,6 +37,30 @@ def passwd_file
   return "/home/#{site_alias}-#{app_owner}/passwd"
 end
 
+def passwd
+  if @new_resource.passwd.nil?
+    return Array.new
+  else
+    return @new_resource.passwd
+  end
+end
+
+def db
+  db = Hash.new
+  @new_resource.db.to_hash.each do |k, v|
+    case k
+    when 'host'
+      db[k] = v
+    when 'db' || 'user' 
+      db[k] = (v.nil? && site_alias) || v
+    when 'password'
+      db[k] = SecureRandom.hex(20)
+    when 'prefix'
+      db[k] = (v.nil? && '') || v
+    end
+
+  end
+end
 def mysql_connection_info  
   return {
     :host => @new_resource.db['host'],
@@ -42,12 +69,6 @@ def mysql_connection_info
   }
 end
 
-def db_password
-  if @new_resource.db['password'].nil?
-    @new_resource.db['password'] = SecureRandom.hex(20)
-  end
-  return @new_resource.db['password']
-end
 def app_owner
   if @new_resource.app_owner.nil?
    return site_alias
@@ -87,8 +108,8 @@ action :create do
     owner app_owner
     group app_owner
     mode '0644'
-    not_if { @new_resource.passwd.empty? }
-    variables(content: @new_resource.passwd.join('\n'))
+    not_if { passwd.empty? }
+    variables(content: passwd.join('\n'))
   end
 
   ## drupal settings file
@@ -99,11 +120,11 @@ action :create do
     mode '0444'
     variables(
        db: site_alias,
-       db_host: db_host,
-       db_user: site_alias,
-       db_password: db_password,
-       db_prefix: @new_resource.db['db_prefix'],
-       extra_settings: @new_resource.extra_settings
+       db_host: db['host'],
+       db_user: db['user'],
+       db_password: db['password'],
+       db_prefix: db['prefix'],
+       extra_settings: new_resource.extra_settings
     )
   end
 
@@ -114,15 +135,15 @@ action :create do
     group 'root'
     mode '0644'
     variables(
-      ssl_crt: @new_resource.ssl_crt,
-      ssl_key: @new_resource.ssl_key,
-      ssl_chain: @new_resource.ssl_chain,
+      ssl_crt: new_resource.ssl_crt,
+      ssl_key: new_resource.ssl_key,
+      ssl_chain: new_resource.ssl_chain,
       url: server_name,
       primary_url: primary_url,
       app_path: app_path,
       passwd_file: passwd_file,
-      passwd_text: @new_resource.passwd_text,
-      private_dir: @new_resource.private_dir
+      passwd_text: new_resource.passwd_text,
+      private_dir: new_resource.private_dir
     )
     action :create
     notifies :restart, 'service[nginx]', :delayed
