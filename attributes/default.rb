@@ -25,7 +25,7 @@ default['nginx_drupal']['apc']['rfc1867']   = '1'
 default['nginx_drupal']['drupal_instance']['public_files']   = 'sites/default/files'
 default['nginx_drupal']['drupal_instance']['private_files']   = 'sites/default/files/_private'
 
-defualt['nginx_drupal']['mysql']['root_passsword'] = ''
+default['nginx_drupal']['mysql']['root_passsword'] = ''
 if node['nginx_drupal']['mysql']['root_passsword'].nil?
   default['nginx_drupal']['mysql']['root_passsword'] = SecureRandom.hex(20)
 end

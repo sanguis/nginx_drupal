@@ -7,10 +7,11 @@ require 'uri'
 require 'securerandom'
 
 def primary_url
-  return @new_resource.url[0]
+  return @new_resource.url.first
 end
 def shortname
-  return primary_url.URI.parse.host.gsub(/^www\./, '').slice[0, 6]
+  uri = URI(primary_url)
+  return uri.host.to_s.gsub(/^www\./, '').slice(0, 6)
 end
 def site_alias
   return "#{shortname}.#{@new_resource.instance}"
@@ -22,7 +23,7 @@ def server_name
 end
 
 def app_path
-  if @new_resource.app_path.empty?
+  if @new_resource.app_path.nil?
     return "/srv/www/#{site_alias}"
   else
     return @new_resource.app_path
@@ -52,8 +53,8 @@ action :create do
   #todo: create file system
   #application directory
   directory app_path do
-    owner @new_resource.app_ower
-    group @new_resource.app_ower
+    owner @new_resource.app_owner
+    group @new_resource.app_owner
     mode '0755'
     recursive TRUE
     action :create

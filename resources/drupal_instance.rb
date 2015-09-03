@@ -8,7 +8,7 @@ default_action :create
 
 actions :create, :delete
 
-attribute :url, :kind_of => Array, :requred => true, :name_attribute => true
+attribute :url, :kind_of => Array, :name_attribute => true
 attribute :instance, :kind_of => String, :default => 'production'
 attribute :ssl_crt, :kind_of => String
 attribute :ssl_key, :kind_of => String
