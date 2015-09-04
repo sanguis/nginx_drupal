@@ -31,7 +31,7 @@ def app_path
 end
 
 def passwd_file
-  return "/home/#{site_alias}-#{app_owner}/passwd"
+  return "/home/#{app_owner}/#{site_alias}_passwd"
 end
 
 def passwd
@@ -77,7 +77,7 @@ end
 action :create do
   #todo: create file system
   #application directory
-  directory app_path do
+  directory "#{app_path}/sites/#{new_resource.sites_directory}" do
     owner app_owner
     group app_owner
     mode '0755'
@@ -89,6 +89,7 @@ action :create do
   directory "#{app_path}/#{@new_resource.public_files}" do
     owner node['nginx']['user']
     group node['nginx']['user']
+    recursive true
     mode '0755'
     action :create
   end
@@ -96,21 +97,24 @@ action :create do
   directory "#{app_path}/#{@new_resource.private_files}" do
     owner node['nginx']['user']
     group node['nginx']['user']
+    recursive true
     mode '0755'
     action :create
   end
   ## create passwd file
-  template passwd_file do
-    source 'blank.erb'
-    owner app_owner
-    group app_owner
-    mode '0644'
-    not_if { passwd.empty? }
-    variables(content: passwd.join('\n'))
+  unless passwd.empty?
+    file passwd_file do
+      owner app_owner
+      group app_owner
+      mode '0644'
+      content passwd.join('\n')
+      action :create
+    end
   end
 
   ## drupal settings file
   template "#{app_path}/sites/#{@new_resource.sites_directory}/settings.php" do
+    cookbook "nginx_drupal"
     source 'settings.php.erb'
     owner app_owner
     group app_owner
@@ -127,6 +131,7 @@ action :create do
 
   ## create vhost file
   template "/etc/nginx/sites-enabled/#{site_alias}.conf" do
+    cookbook "nginx_drupal"
     source 'vhost.erb'
     owner 'root'
     group 'root'
@@ -143,7 +148,7 @@ action :create do
       private_files: new_resource.private_files
     )
     action :create
-    notifies :restart, 'service[nginx]', :delayed
+    #notifies :restart, 'service[nginx]', :delayed
   end
   #todo: create add ssl
   #todo: create database
