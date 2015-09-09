@@ -60,3 +60,10 @@ if node['php']['version'].to_f > 5.5
     )
   end
 end
+
+include_recipe 'composer'
+
+composer_project "drush" do
+  action :update
+  project_dir node['drush']['install_dir']
+end
