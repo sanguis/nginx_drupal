@@ -7,10 +7,14 @@ provisioner:
 
 platforms:
   - name: ubuntu-14.04
+    run_list:
+        - recipe[apt]
   - name: centos-7.1
 
 suites:
   - name: default
     run_list:
+      - recipe[nginx::repo]
+      - recipe[nginx::default]
       - recipe[nginx_drupal::default]
     attributes:
