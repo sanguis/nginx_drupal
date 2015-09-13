@@ -2,7 +2,7 @@
 source 'https://rubygems.org'
 
 gem 'berkshelf'
-gem 'drud'
+gem 'drud', :git => 'https://github.com/Knectar/drud.git'
 
 group :test, :development do
   gem 'foodcritic'

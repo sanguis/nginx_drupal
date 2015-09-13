@@ -1,22 +1,16 @@
 Josh Beauregard (sanguis)'s nginx_drupal cookbook
 =============================
 
-nginx_drupal (1.0.3) Installs/Configures nginx_drupal templates
+nginx_drupal (1.0.3) Prepaires a LEMP stack for a Drupal install
 
 # nginx_drupal cookbook
-
-# Requirements
 
 # Usage
 Installs an app template for vhosts to include that contains a common set of drupal inc files.
 
-# Attributes
-
-# Recipes
-
 # Author
 
-Author:: Josh Beauregard (sanguisdex@gmail.com)
+Author:: Josh Beauregard (josh.beauregard@knectar.com)
 
 
 Requirements
@@ -44,8 +38,37 @@ Recipes
 
 Testing and Utility
 -------
+    <Rake::Task default => [test]>
+
+    <Rake::Task foodcritic => []>
+      Run Foodcritic lint checks
+
+    <Rake::Task integration => [kitchen:all]>
+      Alias for kitchen:all
+
+    <Rake::Task kitchen:all => [default-ubuntu-1404, default-centos-71]>
+      Run all test instances
+
+    <Rake::Task kitchen:default-centos-71 => []>
+      Run default-centos-71 test instance
+
+    <Rake::Task kitchen:default-ubuntu-1404 => []>
+      Run default-ubuntu-1404 test instance
+
     <Rake::Task readme => []>
       Generate the Readme.md file.
+
+    <Rake::Task rubocop => []>
+      Run RuboCop style and lint checks
+
+    <Rake::Task rubocop:auto_correct => []>
+      Auto-correct RuboCop offenses
+
+    <Rake::Task spec => []>
+      Run ChefSpec examples
+
+    <Rake::Task test => [rubocop, foodcritic, spec]>
+      Run all tests
 
 License and Authors
 ------------------
@@ -53,7 +76,7 @@ License and Authors
 The following engineers have contributed to this code:
  * [Josh Beauregard](https://github.com/sanguis) - 86 commits
 
-Copyright:: 2014, NewMedia Denver
+Copyright:: 2014-2015, [Knectar](https://www.knectar.com)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
