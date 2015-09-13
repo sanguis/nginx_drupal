@@ -2,10 +2,7 @@
 source 'https://rubygems.org'
 
 gem 'berkshelf'
-gem 'kitchen-vagrant'
 gem 'drud'
-gem 'chef'
-gem 'colorize'
 
 group :test, :development do
   gem 'chefspec'
