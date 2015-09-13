@@ -8,18 +8,20 @@ require 'securerandom'
 
 use_inline_resources if defined?(use_inline_resources)
 
-
 def primary_url
-  return new_resource.url.first
+  new_resource.url.first
 end
+
 def shortname
-  return primary_url.to_s.gsub(/^www\./, '').gsub(/\./, '_').slice(0, 6)
+  primary_url.to_s.gsub(/^www\./, '').gsub(/\./, '_').slice(0, 6)
 end
+
 def site_alias
-  return "#{shortname}.#{new_resource.instance}"
+  "#{shortname}.#{new_resource.instance}"
 end
+
 def server_name
-  return new_resource.url.join(' ')
+  new_resource.url.join(' ')
 end
 
 def app_path
@@ -31,52 +33,45 @@ def app_path
 end
 
 def passwd_file
-  return "/home/#{app_owner}/#{site_alias}_passwd"
+  "/home/#{app_owner}/#{site_alias}_passwd"
 end
 
 def passwd
   if @new_resource.passwd.nil?
-    return Array.new
+    return []
   else
     return @new_resource.passwd
   end
 end
 
 def db
-  db = Hash.new
-  @new_resource.db.to_hash.each do |k, v|
-    case k
-    when 'host'
-      db[k] = v
-    when 'db' || 'user' 
-      db[k] = (v.nil? && site_alias) || v
-    when 'password'
-      db[k] = SecureRandom.hex(20)
-    when 'prefix'
-      db[k] = (v.nil? && '') || v
-    end
-
-  end
+  db = @new_resource.db.to_hash
+  db['user'] = (db['user'].nil? && site_alias) || db['user']
+  db['db'] = (db['db'].nil? && site_alias) || db['db']
+  db['password'] = (db['password'].nil? && SecureRandom.hex(20)) || db['password']
+  db['prefix'] = (db['prefix'].nil? && '') || db['prefix']
+  return db;
 end
-def mysql_connection_info  
-  return {
-    :host => new_resource.db['host'],
-    :username => 'root',
-    :password => node['nginx_drupal']['mysql']['root_password']
+
+def mysql_connection_info
+  {
+    host: new_resource.db['host'],
+    username: 'root',
+    password: node['nginx_drupal']['mysql']['root_password']
   }
 end
 
 def app_owner
   if @new_resource.app_owner.nil?
-   return site_alias
+    return site_alias
   else
     return @new_resource.app_owner
   end
 end
 
 action :create do
-  #todo: create file system
-  #application directory
+  # TODO: create file system
+  # application directory
   directory "#{app_path}/sites/#{new_resource.sites_directory}" do
     owner app_owner
     group app_owner
@@ -85,7 +80,7 @@ action :create do
     action :create
   end
 
-  #public files
+  # public files
   directory "#{app_path}/#{@new_resource.public_files}" do
     owner node['nginx']['user']
     group node['nginx']['user']
@@ -93,7 +88,7 @@ action :create do
     mode '0755'
     action :create
   end
-  #private files
+  # private files
   directory "#{app_path}/#{@new_resource.private_files}" do
     owner node['nginx']['user']
     group node['nginx']['user']
@@ -114,24 +109,24 @@ action :create do
 
   ## drupal settings file
   template "#{app_path}/sites/#{@new_resource.sites_directory}/settings.php" do
-    cookbook "nginx_drupal"
+    cookbook 'nginx_drupal'
     source 'settings.php.erb'
     owner app_owner
     group app_owner
     mode '0444'
     variables(
-       db: site_alias,
-       db_host: db['host'],
-       db_user: db['user'],
-       db_password: db['password'],
-       db_prefix: db['prefix'],
-       extra_settings: new_resource.extra_settings
+      db: site_alias,
+      db_host: db['host'],
+      db_user: db['user'],
+      db_password: db['password'],
+      db_prefix: db['prefix'],
+      extra_settings: new_resource.extra_settings
     )
   end
 
   ## create vhost file
   template "/etc/nginx/sites-enabled/#{site_alias}.conf" do
-    cookbook "nginx_drupal"
+    cookbook 'nginx_drupal'
     source 'vhost.erb'
     owner 'root'
     group 'root'
@@ -148,32 +143,32 @@ action :create do
       private_files: new_resource.private_files
     )
     action :create
-    #notifies :restart, 'service[nginx]', :delayed
+    # notifies :restart, 'service[nginx]', :delayed
   end
-  #todo: create add ssl
-  #todo: create database
-#  database site_alias do
-#    connection mysql_connection_info
-#    provider   Chef::Provider::Database::Mysql
-#    action :create
-#  end
-#
-#mysql_database_user site_alias do
-#  connection mysql_connection_info
-#  password db_password 
-#  database_name site_alias
-#  action :create
-#end
+  # TODO: create add ssl
+  # TODO: create database
+  #  database site_alias do
+  #    connection mysql_connection_info
+  #    provider   Chef::Provider::Database::Mysql
+  #    action :create
+  #  end
+  #
+  # mysql_database_user site_alias do
+  #  connection mysql_connection_info
+  #  password db_password
+  #  database_name site_alias
+  #  action :create
+  # end
 
-  #todo: create drush alieas
-  Chef::Log.info("created drupal_instance")
+  # TODO: create drush alieas
+  Chef::Log.info('created drupal_instance')
   new_resource.updated_by_last_action(true)
 end
 action :delete do
-  #todo: delete file system
-  #todo:delete vhost file
-  #todo: delete database
-  #todo: delete drush alieas
+  # TODO: delete file system
+  # TODO: delete vhost file
+  # TODO: delete database
+  # TODO: delete drush alieas
   cookbook_file '/etc/cron.hourly/drupal.cron.sh' do
     source 'drupal.cron.sh'
     owner 'root'
@@ -181,6 +176,6 @@ action :delete do
     mode '0644'
     action :create
   end
-  Chef::Log.info("deleted drupal_instance")
+  Chef::Log.info('deleted drupal_instance')
   new_resource.updated_by_last_action(true)
 end

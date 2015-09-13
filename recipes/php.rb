@@ -3,67 +3,67 @@
 # Recipe:: php
 #
 # Copyright (C) 2015 Knectar
-# 
+#
 # All rights reserved - Do Not Redistribute
 #
 
 ## install php libs via pear
-include_recipe 'php' 
+include_recipe 'php'
 
 # install php fpm
-php_fpm_pool "default" do
+php_fpm_pool 'default' do
   listen '/var/run/php5-fpm.sock'
   action :install
 end
 
-#APC and dependacies
+# APC and dependacies
 case node['platform_family']
-  #when 'rhel', 'fedora'
+  # when 'rhel', 'fedora'
   # %w{ httpd-devel pcre pcre-devel }.each do |pkg|
   #  package pkg do
   #   action :install
   # end
-  #end
+  # end
 when 'debian'
-  %w{ php5-gd php5-mysql }.each do |pkg|
+  %w( php5-gd php5-mysql ).each do |pkg|
     package pkg do
       action :upgrade
     end
   end
 end
 
-#APC and dependacies
+# APC and dependacies
 if node['php']['version'].to_f > 5.5
   case node['platform_family']
   when 'rhel', 'fedora'
-    %w{ httpd-devel pcre pcre-devel }.each do |pkg|
+    %w( httpd-devel pcre pcre-devel ).each do |pkg|
       package pkg do
         action :install
       end
     end
   end
 
-  php_pear "apc" do
+  php_pear 'apc' do
     action :install
     directives(
-      :shm_segments=> node['nginx_drupal']['shm_segments'],
-      :shm_size => node['nginx_drupal']['shm_size '],
-      :ttl=> node['nginx_drupal']['ttl'],
-      :user_ttl=> node['nginx_drupal']['user_ttl'],
-      :enable_cli=> node['nginx_drupal']['enable_cli'],
-      :stat=> node['nginx_drupal']['stat'],
-      :stat_ctime=> node['nginx_drupal']['stat_ctime'],
-      :lazy_classes=> node['nginx_drupal']['lazy_classes'],
-      :lazy_functions=> node['nginx_drupal']['lazy_functions'],
-      :write_lock=> node['nginx_drupal']['write_lock'],
-      :rfc1867=> node['nginx_drupal']['rfc1867']
+      shm_segments: node['nginx_drupal']['shm_segments'],
+      shm_size: node['nginx_drupal']['shm_size '],
+      ttl: node['nginx_drupal']['ttl'],
+      user_ttl: node['nginx_drupal']['user_ttl'],
+      enable_cli: node['nginx_drupal']['enable_cli'],
+      stat: node['nginx_drupal']['stat'],
+      stat_ctime: node['nginx_drupal']['stat_ctime'],
+      lazy_classes: node['nginx_drupal']['lazy_classes'],
+      lazy_functions: node['nginx_drupal']['lazy_functions'],
+      write_lock: node['nginx_drupal']['write_lock'],
+      rfc1867: node['nginx_drupal']['rfc1867']
     )
   end
 end
 
 include_recipe 'composer'
 
-composer_project "drush" do
+composer_project 'drush' do
   action :update
   project_dir node['drush']['install_dir']
 end

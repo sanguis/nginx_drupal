@@ -3,40 +3,39 @@
 # Recipe:: default
 #
 # Copyright (C) 2015 Knectar
-# 
+#
 # All rights reserved - Do Not Redistribute
 #
 
-
-#create apps directory
-remote_directory "apps" do
-  path "/etc/nginx/apps"
-  files_group "root"
-  files_owner "root"
+# create apps directory
+remote_directory 'apps' do
+  path '/etc/nginx/apps'
+  files_group 'root'
+  files_owner 'root'
   files_mode 00644
-  owner "root"
-  group "root"
+  owner 'root'
+  group 'root'
   mode 00755
   action :create_if_missing
 end
-#enable micro caching
-template "/etc/nginx/conf.d/micro.conf" do
-  source "micro.conf.erb"
+# enable micro caching
+template '/etc/nginx/conf.d/micro.conf' do
+  source 'micro.conf.erb'
   action :create
 end
 
 # create vhost templates
 
- remote_directory "templates" do
-   path "/etc/nginx/templates"
-   files_group "root"
-   files_owner "root"
-   files_mode 00644
-   owner "root"
-   group "root"
-   mode 00755
-   action :create_if_missing
- end
+remote_directory 'templates' do
+  path '/etc/nginx/templates'
+  files_group 'root'
+  files_owner 'root'
+  files_mode 00644
+  owner 'root'
+  group 'root'
+  mode 00755
+  action :create_if_missing
+end
 
 directory '/etc/nginx/snippets' do
   owner 'root'
@@ -76,4 +75,3 @@ directory '/etc/drush' do
   mode 0755
   action :create
 end
-

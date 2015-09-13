@@ -3,11 +3,11 @@
 # Recipe:: mysql
 #
 # Copyright (C) 2015 Knectar
-# 
+#
 # All rights reserved - Do Not Redistribute
 #
 
-#creating mysql server 
+# Creating mysql server.
 
 mysql_service 'default' do
   port '3306'
@@ -24,7 +24,7 @@ mysql_config 'default' do
   action :create
 end
 
-#install the mysql client
+# Install the mysql client.
 
 mysql_client 'default' do
   action :create
