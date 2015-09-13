@@ -5,6 +5,8 @@ gem 'berkshelf'
 gem 'drud'
 
 group :test, :development do
+  gem 'foodcritic'
+   gem 'rubocop', '~> 0.18'
   gem 'chefspec'
   gem 'test-kitchen'
   gem 'kitchen-vagrant'
