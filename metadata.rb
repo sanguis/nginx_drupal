@@ -4,7 +4,7 @@ maintainer_email 'josh.beauregard@knectar.com'
 license 'All rights reserved'
 description 'Prepaires a LEMP stack for a Drupal install'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '1.0.3'
+version '1.0.4'
 
 depends 'nginx'
 depends 'mysql'

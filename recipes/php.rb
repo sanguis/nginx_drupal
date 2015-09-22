@@ -59,6 +59,9 @@ if node['php']['version'].to_f > 5.5
       rfc1867: node['nginx_drupal']['rfc1867']
     )
   end
+  php_pear 'memcached' do
+    action :install
+  end
 end
 
 include_recipe 'composer'
