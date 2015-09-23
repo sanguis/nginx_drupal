@@ -18,35 +18,26 @@ end
 
 # APC and dependacies
 case node['platform_family']
-  # when 'rhel', 'fedora'
-  # %w{ httpd-devel pcre pcre-devel }.each do |pkg|
-  #  package pkg do
-  #   action :install
-  # end
-  # end
+when 'rhel', 'fedora'
+  %w( zlib-devel httpd-devel pcre pcre-devel ).each do |pkg|
+    package pkg do
+      action :install
+    end
+    php_pear 'memcache' do
+      action :install
+      # directives(:shm_size => "128M", :enable_cli => 0)
+    end
+  end
 when 'debian'
-  %w( php5-gd php5-mysql ).each do |pkg|
+  %w( php5-memcache php5-gd php5-mysql ).each do |pkg|
     package pkg do
       action :upgrade
     end
   end
 end
 
-# Install memcached plugin for drupal.
-php_pear 'memcached' do
-  action :install
-end
-
 # APC and dependacies
 if node['php']['version'].to_f > 5.5
-  case node['platform_family']
-  when 'rhel', 'fedora'
-    %w( httpd-devel pcre pcre-devel ).each do |pkg|
-      package pkg do
-        action :install
-      end
-    end
-  end
 
   php_pear 'apc' do
     action :install
