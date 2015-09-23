@@ -32,6 +32,11 @@ when 'debian'
   end
 end
 
+# Install memcached plugin for drupal.
+php_pear 'memcached' do
+  action :install
+end
+
 # APC and dependacies
 if node['php']['version'].to_f > 5.5
   case node['platform_family']
@@ -58,9 +63,6 @@ if node['php']['version'].to_f > 5.5
       write_lock: node['nginx_drupal']['write_lock'],
       rfc1867: node['nginx_drupal']['rfc1867']
     )
-  end
-  php_pear 'memcached' do
-    action :install
   end
 end
 
