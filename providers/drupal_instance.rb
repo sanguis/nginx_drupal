@@ -25,10 +25,10 @@ def server_name
 end
 
 def app_path
-  if @new_resource.app_path.nil?
+  if new_resource.app_path.nil?
     return "/srv/www/#{site_alias}"
   else
-    return @new_resource.app_path
+    return new_resource.app_path
   end
 end
 
@@ -37,20 +37,20 @@ def passwd_file
 end
 
 def passwd
-  if @new_resource.passwd.nil?
+  if new_resource.passwd.nil?
     return []
   else
-    return @new_resource.passwd
+    return new_resource.passwd
   end
 end
 
 def db
-  db = @new_resource.db.to_hash
+  db = new_resource.db.to_hash
   db['user'] = (db['user'].nil? && site_alias) || db['user']
   db['db'] = (db['db'].nil? && site_alias) || db['db']
   db['password'] = (db['password'].nil? && SecureRandom.hex(20)) || db['password']
   db['prefix'] = (db['prefix'].nil? && '') || db['prefix']
-  return db;
+  db
 end
 
 def mysql_connection_info
@@ -62,10 +62,10 @@ def mysql_connection_info
 end
 
 def app_owner
-  if @new_resource.app_owner.nil?
+  if new_resource.app_owner.nil?
     return site_alias
   else
-    return @new_resource.app_owner
+    return new_resource.app_owner
   end
 end
 
@@ -81,7 +81,7 @@ action :create do
   end
 
   # public files
-  directory "#{app_path}/#{@new_resource.public_files}" do
+  directory "#{app_path}/#{new_resource.public_files}" do
     owner node['nginx']['user']
     group node['nginx']['user']
     recursive true
@@ -89,7 +89,7 @@ action :create do
     action :create
   end
   # private files
-  directory "#{app_path}/#{@new_resource.private_files}" do
+  directory "#{app_path}/#{new_resource.private_files}" do
     owner node['nginx']['user']
     group node['nginx']['user']
     recursive true
@@ -108,7 +108,7 @@ action :create do
   end
 
   ## drupal settings file
-  template "#{app_path}/sites/#{@new_resource.sites_directory}/settings.php" do
+  template "#{app_path}/sites/#{new_resource.sites_directory}/settings.php" do
     cookbook 'nginx_drupal'
     source 'settings.php.erb'
     owner app_owner

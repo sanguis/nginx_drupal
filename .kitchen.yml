@@ -24,4 +24,6 @@ suites:
       - recipe[nginx::repo]
       - recipe[nginx::default]
       - recipe[nginx_drupal::default]
+      - recipe[nginx_drupal::php]
+      - recipe[nginx_drupal::mysql]
       - recipe[nginx_drupal::example]
