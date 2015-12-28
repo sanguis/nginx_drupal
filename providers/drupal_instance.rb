@@ -83,7 +83,6 @@ action :create do
   # public files
   directory "#{app_path}/#{new_resource.public_files}" do
     owner node['nginx']['user']
-    group node['nginx']['user']
     recursive true
     mode '0755'
     action :create
@@ -91,7 +90,6 @@ action :create do
   # private files
   directory "#{app_path}/#{new_resource.private_files}" do
     owner node['nginx']['user']
-    group node['nginx']['user']
     recursive true
     mode '0755'
     action :create
@@ -100,7 +98,6 @@ action :create do
   unless passwd.empty?
     file passwd_file do
       owner app_owner
-      group app_owner
       mode '0644'
       content passwd.join('\n')
       action :create
@@ -112,7 +109,7 @@ action :create do
     cookbook 'nginx_drupal'
     source 'settings.php.erb'
     owner app_owner
-    group app_owner
+    group node['nginx']['user']
     mode '0444'
     variables(
       db: site_alias,

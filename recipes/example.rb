@@ -19,7 +19,7 @@ user 'sites' do
   action :create
   comment 'drupal user'
   gid node['php']['fpm_group']
-  home '/home/user'
+  home '/home/sites'
   shell '/bin/zsh'
 end
 
