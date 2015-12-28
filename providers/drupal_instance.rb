@@ -114,10 +114,10 @@ action :create do
     mode '0444'
     variables(
       db: site_alias,
-      db_host: db.host,
-      db_user: db.user,
-      db_password: db.password,
-      db_prefix: db.prefix,
+      db_host: db['host'],
+      db_user: db['user'],
+      db_password: db['password'],
+      db_prefix: db['prefix'],
       extra_settings: new_resource.extra_settings
     )
   end

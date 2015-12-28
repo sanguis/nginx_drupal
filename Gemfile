@@ -11,4 +11,5 @@ group :test, :development do
   gem 'kitchen-docker'
   gem 'chef'
   gem 'colorize'
+  gem 'knife-spec'
 end
