@@ -7,7 +7,6 @@ describe service('nginx') do
   it { should be_running }
 end
 
-
 package('mysql-server') do
   it { should be_installed }
 end
@@ -21,5 +20,3 @@ end
 describe service('php-fpm') do
   it { should be_running }
 end
-
-

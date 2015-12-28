@@ -9,10 +9,11 @@
 
 ## install php libs via pear
 include_recipe 'php'
+include_recipe 'composer'
 
 # install php fpm
 php_fpm_pool 'default' do
-  listen '/var/run/php5-fpm.sock'
+  listen node['nginx_drupal']['php']['fpm_listen']
   action :install
 end
 
@@ -57,9 +58,6 @@ if node['php']['version'].to_f > 5.5
   end
 end
 
-include_recipe 'composer'
-
-composer_project 'drush' do
+composer_project node['drush']['install_dir'] do
   action :update
-  project_dir node['drush']['install_dir']
 end

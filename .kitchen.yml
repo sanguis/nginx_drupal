@@ -23,7 +23,13 @@ suites:
     run_list:
       - recipe[nginx::repo]
       - recipe[nginx::default]
+      - recipe[git::default]
+      - recipe[php]
+      - recipe[drush::git]
       - recipe[nginx_drupal::default]
       - recipe[nginx_drupal::php]
       - recipe[nginx_drupal::mysql]
       - recipe[nginx_drupal::example]
+    attributes:
+      drush:
+         version: 7.x

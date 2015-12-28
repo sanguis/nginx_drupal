@@ -74,7 +74,7 @@ action :create do
   # application directory
   directory "#{app_path}/sites/#{new_resource.sites_directory}" do
     owner app_owner
-    group app_owner
+    group node['nginx']['user']
     mode '0755'
     recursive TRUE
     action :create

@@ -29,3 +29,5 @@ default['nginx_drupal']['mysql']['root_passsword'] = ''
 if node['nginx_drupal']['mysql']['root_passsword'].nil?
   default['nginx_drupal']['mysql']['root_passsword'] = SecureRandom.hex(20)
 end
+
+default['nginx_drupal']['php']['fpm_listen'] = '/var/run/php5-fpm.sock'
