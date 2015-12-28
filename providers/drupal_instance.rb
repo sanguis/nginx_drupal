@@ -49,8 +49,9 @@ def db
   db['user'] = (db['user'].nil? && site_alias) || db['user']
   db['db'] = (db['db'].nil? && site_alias) || db['db']
   db['password'] = (db['password'].nil? && SecureRandom.hex(20)) || db['password']
+  db['host'] = (db['host'].nil? && 'localhost') || db['host']
   db['prefix'] = (db['prefix'].nil? && '') || db['prefix']
-  db
+  return db
 end
 
 def mysql_connection_info
@@ -113,10 +114,10 @@ action :create do
     mode '0444'
     variables(
       db: site_alias,
-      db_host: db['host'],
-      db_user: db['user'],
-      db_password: db['password'],
-      db_prefix: db['prefix'],
+      db_host: db.host,
+      db_user: db.user,
+      db_password: db.password,
+      db_prefix: db.prefix,
       extra_settings: new_resource.extra_settings
     )
   end

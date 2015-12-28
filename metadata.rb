@@ -18,6 +18,8 @@ depends 'mysql2_chef_gem', '~> 1.0.2'
 depends 'php'
 depends 'zsh'
 depends 'composer', '~> 2.2.0'
-depends 'drush', git: 'git@github.com:msonnabaum/chef-drush.git'
 depends 'database'
 depends 'memcached'
+
+source_url 'https://github.com/sanguis/nginx_drupal' if respond_to?(:source_url)
+issues_url 'https://github.com/sanguis/nginx_drupal/issues' if respond_to?(:issues_url)

@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 user 'sites' do
+  supports manage_home: true
   action :create
   comment 'drupal user'
   gid node['php']['fpm_group']
