@@ -1,14 +1,15 @@
 ---
 driver:
-  name: vagrant
+  name: docker
+  use_sudo: false
 
 provisioner:
-  name: chef_solo
+  name: chef_zero
 
 platforms:
   - name: ubuntu-14.04
     run_list:
-        - recipe[apt]
+      - recipe[apt]
   - name: centos-7.1
 
 suites:
@@ -18,3 +19,11 @@ suites:
       - recipe[nginx::default]
       - recipe[nginx_drupal::default]
     attributes:
+  - name: example
+    run_list:
+      - recipe[nginx::repo]
+      - recipe[nginx::default]
+      - recipe[nginx_drupal::default]
+      - recipe[nginx_drupal::php]
+      - recipe[nginx_drupal::mysql]
+      - recipe[nginx_drupal::example]
