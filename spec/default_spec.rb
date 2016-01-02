@@ -1,6 +1,5 @@
 # spec_default.rb
 require 'chefspec'
-require 'chefspec'
 require 'chefspec/berkshelf'
 
 describe 'nginx_drupal::default' do

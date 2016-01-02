@@ -45,12 +45,12 @@ def passwd
 end
 
 def db
-  db = new_resource.db.to_hash
-  db['user'] = (db['user'].nil? && site_alias) || db['user']
-  db['db'] = (db['db'].nil? && site_alias) || db['db']
-  db['password'] = (db['password'].nil? && SecureRandom.hex(20)) || db['password']
-  db['host'] = (db['host'].nil? && 'localhost') || db['host']
-  db['prefix'] = (db['prefix'].nil? && '') || db['prefix']
+  db = Hash.new
+  db['user'] = (db['user'].nil? && site_alias) || new_resource.db['user']
+  db['db'] = (db['db'].nil? && site_alias) || new_resource.db['db']
+  db['password'] = (db['password'].nil? && SecureRandom.hex(20)) || new_resource.db['password']
+  db['host'] = (db['host'].nil? && 'localhost') || new_resource.db['host']
+  db['prefix'] = (db['prefix'].nil? && '') || new_resource.db['prefix']
   return db
 end
 
@@ -113,7 +113,7 @@ action :create do
     group node['nginx']['user']
     mode '0444'
     variables(
-      db: site_alias,
+      database: site_alias,
       db_host: db['host'],
       db_user: db['user'],
       db_password: db['password'],
