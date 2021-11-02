@@ -5,7 +5,7 @@ gem 'berkshelf'
 
 group :test, :development do
   gem 'foodcritic'
-  gem 'rubocop', '~> 0.18'
+  gem 'rubocop', '~> 0.49.0'
   gem 'chefspec'
   gem 'test-kitchen'
   gem 'kitchen-docker'
